@@ -744,3 +744,22 @@ FLUID RUST is licensed under **Apache-2.0 OR MIT**.
 ---
 
 **Building the future of memory-safe systems programming.**
+
+---
+
+## 📜 License
+
+FLUID RUST is dual-licensed:
+- **Apache License 2.0** — For commercial and proprietary use
+- **MIT License** — For open-source projects
+
+Choose either license that best fits your use case. Both are included in the repository.
+
+### What This Means:
+✅ Use FLUID RUST commercially  
+✅ Modify and extend  
+✅ Sublicense or redistribute  
+✅ Private use  
+✅ All with proper attribution  
+
+See [LICENSE-MIT](LICENSE-MIT) and [LICENSE-APACHE2](LICENSE-APACHE2) for full terms.

@@ -275,3 +275,17 @@ The counterexample rejection is not a heuristic check; it's a **mathematical pro
 **FLUID RUST: The first systems language that proves memory safety, not just hopes for it.** 🔒
 
 Run `cargo test --test smt_counterexample_demo -- --nocapture` to see it in action.
+
+---
+
+## 📜 License
+
+FLUID RUST is dual-licensed under Apache-2.0 OR MIT.
+
+This proof of concept, all tests, and demonstrations are freely available for:
+- Academic research
+- Commercial products
+- Open-source projects
+- Private use
+
+No restrictions. Choose the license that fits your project.
