@@ -2,8 +2,9 @@
 
 use std::io;
 use std::collections::HashMap;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum EffectRequest {
     IO { op: String, fd: u32, data: Vec<u8> },
     State { op: String, cell_id: u32, value: u64 },
@@ -15,7 +16,7 @@ pub enum EffectRequest {
     Concurrency { op: String, lock_id: u32 },
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum EffectResponse {
     IO { bytes: usize, status: i32 },
     State { old_value: u64, new_value: u64 },
