@@ -18,13 +18,44 @@ impl SmtGenerator {
     }
 
     pub fn extract_from_rmir(&mut self, _rmir_bytecode: &[u8]) -> io::Result<String> {
-        // TODO: Phase P4 — implement real constraint extraction from RMIR
+        // TODO: Phase P4 — parse RMIR and extract constraints
+        // For now, return stub constraints
         Ok(self.constraints.to_smt_lib2())
     }
 
     pub fn solve(&self) -> io::Result<super::proof::SmtProof> {
-        // TODO: Phase P4 — invoke Z3 solver
-        Ok(super::proof::SmtProof::default())
+        // Generate SMT-LIB2 program from constraints
+        let program = self.constraints.to_smt_lib2();
+
+        // Solve with Z3 solver
+        let solver = super::z3_bridge::Z3Solver::new(&program);
+        let result = solver.solve();
+
+        // Convert solver result to proof
+        match result {
+            super::z3_bridge::SolveResult::Satisfiable { model } => {
+                Ok(super::proof::SmtProof {
+                    assertions: self
+                        .constraints
+                        .constraints
+                        .iter()
+                        .map(|c| c.to_smt_lib2())
+                        .collect(),
+                    satisfiable: true,
+                    model,
+                })
+            }
+            super::z3_bridge::SolveResult::Unsatisfiable { .. } => {
+                Ok(super::proof::SmtProof {
+                    assertions: vec![],
+                    satisfiable: false,
+                    model: Default::default(),
+                })
+            }
+            super::z3_bridge::SolveResult::Unknown(msg) => {
+                Err(io::Error::new(io::ErrorKind::Other, msg))
+            }
+        }
     }
 }
 

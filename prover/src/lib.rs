@@ -1,5 +1,5 @@
 //! FLUID RUST Proof Engine
-//! 
+//!
 //! Converts RMIR bytecode to verified proof certificates via:
 //! - ASP (Answer Set Programming) for ownership/region/linearity proofs
 //! - SMT (Satisfiability Modulo Theories) for numeric constraint solving
@@ -9,6 +9,7 @@ pub mod asp;
 pub mod smt;
 pub mod certificate;
 pub mod verifier;
+pub mod obligations;
 
 use std::io;
 

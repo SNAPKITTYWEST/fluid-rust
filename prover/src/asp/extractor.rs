@@ -22,13 +22,46 @@ impl AspExtractor {
     }
 
     pub fn extract_from_rmir(&mut self, _rmir_bytecode: &[u8]) -> io::Result<String> {
-        // TODO: Phase P4 — implement real extraction from RMIR
+        // TODO: Phase P4 — parse RMIR and extract facts
+        // For now, return stub facts
         Ok(self.facts.to_asp_program())
     }
 
-    pub fn solve(&self) -> io::Result<super::proof::AspProof> {
-        // TODO: Phase P4 — invoke clingo solver
-        Ok(super::proof::AspProof::default())
+    pub fn solve(&mut self) -> io::Result<super::proof::AspProof> {
+        // Generate ASP program from facts
+        let program = self.facts.to_asp_program();
+
+        // Solve with ASP solver
+        let solver = super::solver::AspSolver::new(&program);
+        let result = solver.solve()?;
+
+        // Convert solver result to proof
+        match result {
+            super::solver::SolveResult::Satisfiable { answer_set } => {
+                Ok(super::proof::AspProof {
+                    facts: self
+                        .facts
+                        .ownership_facts
+                        .iter()
+                        .map(|f| f.to_string())
+                        .collect(),
+                    rules: vec![],
+                    satisfiable: true,
+                    answer_set: answer_set.lines().map(|s| s.to_string()).collect(),
+                })
+            }
+            super::solver::SolveResult::Unsatisfiable => {
+                Ok(super::proof::AspProof {
+                    facts: vec![],
+                    rules: vec![],
+                    satisfiable: false,
+                    answer_set: vec![],
+                })
+            }
+            super::solver::SolveResult::Unknown(msg) => {
+                Err(io::Error::new(io::ErrorKind::Other, msg))
+            }
+        }
     }
 }
 
