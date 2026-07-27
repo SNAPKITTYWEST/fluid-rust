@@ -10,7 +10,8 @@ pub mod frontend;
 pub mod rmir;
 pub mod lowering;
 pub mod backend;
+pub mod artifact;
+pub mod pipeline;
 
-// TODO: Add error handling, diagnostic reporting, and CLI argument parsing
-// TODO: Wire up parser, elaborator, and lowering pipeline
-// TODO: Implement proof obligation extraction and serialization
+pub use artifact::CompilationArtifact;
+pub use pipeline::compile;
