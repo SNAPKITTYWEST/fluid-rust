@@ -3,9 +3,9 @@
 //! Blake3-sealed proof certificate cache with append-only Write-Once-Read-Many semantics.
 //! Reduces re-verification overhead by ~50% through cryptographic proof reuse.
 
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::io;
-use serde::{Deserialize, Serialize};
 
 /// Blake3 hash digest (32 bytes)
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -153,7 +153,10 @@ impl ProofCache {
 
         // Verify seal before storing
         if !cert.verify_seal() {
-            return Err(io::Error::new(io::ErrorKind::InvalidData, "Seal verification failed"));
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                "Seal verification failed",
+            ));
         }
 
         self.certificates.insert(hash, cert.clone());

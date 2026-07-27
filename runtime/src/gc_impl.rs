@@ -1,6 +1,5 @@
 /// Mark-and-sweep garbage collector with cycle detection
-
-use std::collections::{HashSet, HashMap};
+use std::collections::{HashMap, HashSet};
 
 #[derive(Clone)]
 pub struct HeapObject {
@@ -63,7 +62,8 @@ impl GarbageCollector {
 
         // Sweep phase: count freed bytes
         let mut freed = 0;
-        let to_remove: Vec<u64> = self.objects
+        let to_remove: Vec<u64> = self
+            .objects
             .iter()
             .filter(|(_, obj)| !self.marked.contains(&obj.id))
             .map(|(id, _)| *id)

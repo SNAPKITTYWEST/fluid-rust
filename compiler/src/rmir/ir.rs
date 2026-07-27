@@ -45,9 +45,7 @@ pub enum RegionStatus {
     /// Region not yet entered; cannot allocate or access
     Unentered,
     /// Region is active; allocations are valid
-    Active {
-        allocations: Vec<Id>,
-    },
+    Active { allocations: Vec<Id> },
     /// Region has been exited; all allocations must be deallocated
     Closed,
 }
@@ -85,18 +83,12 @@ pub enum RmirInstruction {
     /// Assign a value to an identifier.
     /// Precondition: none
     /// Postcondition: values[id] = v
-    Assign {
-        id: Id,
-        value: Value,
-    },
+    Assign { id: Id, value: Value },
 
     /// Move a value from one identifier to another (transfer ownership).
     /// Precondition: values[src] exists, capability(src, move) held
     /// Postcondition: values[dst] = values[src], values[src] invalidated
-    Move {
-        src: Id,
-        dst: Id,
-    },
+    Move { src: Id, dst: Id },
 
     /// Borrow a value (create a reference with limited lifetime).
     /// Precondition: values[src] exists, capability(src, borrow) held
@@ -104,23 +96,19 @@ pub enum RmirInstruction {
     Borrow {
         src: Id,
         borrow_id: Id,
-        mode: String, // "shared" or "mut"
+        mode: String,  // "shared" or "mut"
         lifetime: u32, // Program point where borrow ends
     },
 
     /// Consume a value (invalidate it, making further use a compile error).
     /// Precondition: values[id] exists
     /// Postcondition: values[id] = consumed, generates proof obligation
-    Consume {
-        id: Id,
-    },
+    Consume { id: Id },
 
     /// Enter a region (begin its lifetime, prepare for allocations).
     /// Precondition: regions[region_id] = Unentered
     /// Postcondition: regions[region_id] = Active({})
-    RegionEnter {
-        region_id: RegionId,
-    },
+    RegionEnter { region_id: RegionId },
 
     /// Allocate memory within a region.
     /// Precondition: regions[region_id] = Active, size > 0
@@ -134,31 +122,22 @@ pub enum RmirInstruction {
     /// Deallocate memory within a region.
     /// Precondition: regions[region_id] = Active, ptr_id in allocations
     /// Postcondition: regions[region_id].allocations -= ptr_id
-    Deallocate {
-        region_id: RegionId,
-        ptr_id: Id,
-    },
+    Deallocate { region_id: RegionId, ptr_id: Id },
 
     /// Exit a region (end its lifetime, validate all allocations deallocated).
     /// Precondition: regions[region_id] = Active, allocations.is_empty()
     /// Postcondition: regions[region_id] = Closed, generates proof obligation
-    RegionExit {
-        region_id: RegionId,
-    },
+    RegionExit { region_id: RegionId },
 
     /// Emit an effect (request a side effect from the runtime).
     /// Precondition: none (effect may have preconditions checked by prover)
     /// Postcondition: effects += eff, generates proof obligation for preconditions
-    EffectEmit {
-        effect: Effect,
-    },
+    EffectEmit { effect: Effect },
 
     /// Assert a predicate must hold (generates proof obligation).
     /// Precondition: none (prover must verify predicate is true)
     /// Postcondition: generates proof obligation for predicate
-    Assert {
-        predicate: String,
-    },
+    Assert { predicate: String },
 }
 
 /// A function in RMIR form: a list of instructions with initial state.

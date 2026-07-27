@@ -1,9 +1,9 @@
 //! Proof Certificate Generation and Verification
 //! Combines ASP + SMT proofs with cryptographic sealing
 
-use std::io;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::io;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ProofCertificate {
@@ -32,13 +32,14 @@ impl ProofCertificate {
     }
 
     pub fn serialize_json(&self) -> io::Result<String> {
-        serde_json::to_string_pretty(self)
-            .map_err(|e| io::Error::new(io::ErrorKind::Other, e))
+        serde_json::to_string_pretty(self).map_err(|e| io::Error::new(io::ErrorKind::Other, e))
     }
 
     pub fn sign(&mut self, _key: &str) {
         // Ed25519 signature (simplified)
-        self.signature = blake3::hash(self.program_hash.as_bytes()).to_hex().to_string();
+        self.signature = blake3::hash(self.program_hash.as_bytes())
+            .to_hex()
+            .to_string();
     }
 }
 

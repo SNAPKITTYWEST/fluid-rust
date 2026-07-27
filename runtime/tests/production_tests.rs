@@ -22,7 +22,9 @@ fn test_proof_cache_50_percent_reduction() {
     let _miss = cache.get_proof(bytecode);
 
     // Store the proof
-    let _hash = cache.store_proof(bytecode, proof_data.clone(), 100).unwrap();
+    let _hash = cache
+        .store_proof(bytecode, proof_data.clone(), 100)
+        .unwrap();
 
     // Subsequent retrievals (hits)
     for _ in 0..99 {
@@ -46,7 +48,8 @@ fn test_proof_cache_50_percent_reduction() {
 
     println!(
         "Proof cache reduction: {:.1}% (hit rate: {:.1}%)",
-        reduction, hit_rate * 100.0
+        reduction,
+        hit_rate * 100.0
     );
     assert!(reduction > 50.0);
 }
@@ -132,7 +135,10 @@ fn test_effect_batching_coalesce_regions() {
 
     // All regions should be in one batch
     assert_eq!(batches.len(), 1);
-    assert_eq!(batches[0].kind, effect_optimizer::OptimizationKind::CoalesceRegion);
+    assert_eq!(
+        batches[0].kind,
+        effect_optimizer::OptimizationKind::CoalesceRegion
+    );
 }
 
 #[test]
@@ -500,7 +506,10 @@ fn test_stress_effect_optimizer_10k_effects() {
     let total_effects: usize = batches.iter().map(|b| b.size()).sum();
 
     assert_eq!(total_effects, 10000);
-    println!("Stress test: optimized 10000 effects into {} batches", batches.len());
+    println!(
+        "Stress test: optimized 10000 effects into {} batches",
+        batches.len()
+    );
 }
 
 #[test]

@@ -4,8 +4,8 @@
 //! effect handlers. Achieves ~30% latency reduction for effect-heavy workloads.
 
 use crate::effect_handler_impl::EffectRequest;
-use std::collections::VecDeque;
 use serde::{Deserialize, Serialize};
+use std::collections::VecDeque;
 
 /// Optimization pass on effect stream
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -152,11 +152,16 @@ impl EffectOptimizer {
 
         while count < self.max_batch_size && !self.pending_effects.is_empty() {
             // Check if next is a region allocation without keeping borrow
-            let is_region = matches!(self.pending_effects.front(), Some(EffectRequest::Region { .. }));
+            let is_region = matches!(
+                self.pending_effects.front(),
+                Some(EffectRequest::Region { .. })
+            );
 
             if is_region {
                 // Get the size safely
-                let size = if let Some(EffectRequest::Region { size, .. }) = self.pending_effects.front() {
+                let size = if let Some(EffectRequest::Region { size, .. }) =
+                    self.pending_effects.front()
+                {
                     *size
                 } else {
                     0

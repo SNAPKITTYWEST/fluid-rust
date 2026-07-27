@@ -1,19 +1,43 @@
-/// Effect handler implementations for all 8 core effects
-
-use std::io;
-use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+/// Effect handler implementations for all 8 core effects
+use std::io;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum EffectRequest {
-    IO { op: String, fd: u32, data: Vec<u8> },
-    State { op: String, cell_id: u32, value: u64 },
-    Async { op: String, task_id: u32 },
-    Region { op: String, region_id: u32, size: u32 },
-    GC { op: String },
-    Exception { error: String },
-    FFI { func_ptr: u64, args: Vec<u64> },
-    Concurrency { op: String, lock_id: u32 },
+    IO {
+        op: String,
+        fd: u32,
+        data: Vec<u8>,
+    },
+    State {
+        op: String,
+        cell_id: u32,
+        value: u64,
+    },
+    Async {
+        op: String,
+        task_id: u32,
+    },
+    Region {
+        op: String,
+        region_id: u32,
+        size: u32,
+    },
+    GC {
+        op: String,
+    },
+    Exception {
+        error: String,
+    },
+    FFI {
+        func_ptr: u64,
+        args: Vec<u64>,
+    },
+    Concurrency {
+        op: String,
+        lock_id: u32,
+    },
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -64,7 +88,10 @@ impl ConcurrencyHandler {
 impl EffectHandler for IOHandler {
     fn handle(&mut self, req: EffectRequest) -> io::Result<EffectResponse> {
         match req {
-            EffectRequest::IO { .. } => Ok(EffectResponse::IO { bytes: 0, status: 0 }),
+            EffectRequest::IO { .. } => Ok(EffectResponse::IO {
+                bytes: 0,
+                status: 0,
+            }),
             _ => Err(io::Error::new(io::ErrorKind::InvalidInput, "Not IO")),
         }
     }
@@ -76,7 +103,10 @@ impl EffectHandler for StateHandler {
             EffectRequest::State { cell_id, value, .. } => {
                 let old = self.cells.get(&cell_id).copied().unwrap_or(0);
                 self.cells.insert(cell_id, value);
-                Ok(EffectResponse::State { old_value: old, new_value: value })
+                Ok(EffectResponse::State {
+                    old_value: old,
+                    new_value: value,
+                })
             }
             _ => Err(io::Error::new(io::ErrorKind::InvalidInput, "Not State")),
         }
@@ -86,9 +116,10 @@ impl EffectHandler for StateHandler {
 impl EffectHandler for AsyncHandler {
     fn handle(&mut self, req: EffectRequest) -> io::Result<EffectResponse> {
         match req {
-            EffectRequest::Async { task_id, .. } => {
-                Ok(EffectResponse::Async { task_id, status: "spawned".to_string() })
-            }
+            EffectRequest::Async { task_id, .. } => Ok(EffectResponse::Async {
+                task_id,
+                status: "spawned".to_string(),
+            }),
             _ => Err(io::Error::new(io::ErrorKind::InvalidInput, "Not Async")),
         }
     }
@@ -97,9 +128,12 @@ impl EffectHandler for AsyncHandler {
 impl EffectHandler for RegionHandler {
     fn handle(&mut self, req: EffectRequest) -> io::Result<EffectResponse> {
         match req {
-            EffectRequest::Region { region_id, size, .. } => {
-                Ok(EffectResponse::Region { ptr: 0x1000 + (region_id as u64 * 0x1000), size })
-            }
+            EffectRequest::Region {
+                region_id, size, ..
+            } => Ok(EffectResponse::Region {
+                ptr: 0x1000 + (region_id as u64 * 0x1000),
+                size,
+            }),
             _ => Err(io::Error::new(io::ErrorKind::InvalidInput, "Not Region")),
         }
     }
@@ -135,23 +169,24 @@ impl EffectHandler for FFIHandler {
 impl EffectHandler for ConcurrencyHandler {
     fn handle(&mut self, req: EffectRequest) -> io::Result<EffectResponse> {
         match req {
-            EffectRequest::Concurrency { op, lock_id } => {
-                match op.as_str() {
-                    "lock" => {
-                        let acquired = !self.locks.contains_key(&lock_id);
-                        if acquired {
-                            self.locks.insert(lock_id, true);
-                        }
-                        Ok(EffectResponse::Concurrency { acquired })
+            EffectRequest::Concurrency { op, lock_id } => match op.as_str() {
+                "lock" => {
+                    let acquired = !self.locks.contains_key(&lock_id);
+                    if acquired {
+                        self.locks.insert(lock_id, true);
                     }
-                    "unlock" => {
-                        self.locks.remove(&lock_id);
-                        Ok(EffectResponse::Concurrency { acquired: false })
-                    }
-                    _ => Err(io::Error::new(io::ErrorKind::InvalidInput, "Unknown op")),
+                    Ok(EffectResponse::Concurrency { acquired })
                 }
-            }
-            _ => Err(io::Error::new(io::ErrorKind::InvalidInput, "Not Concurrency")),
+                "unlock" => {
+                    self.locks.remove(&lock_id);
+                    Ok(EffectResponse::Concurrency { acquired: false })
+                }
+                _ => Err(io::Error::new(io::ErrorKind::InvalidInput, "Unknown op")),
+            },
+            _ => Err(io::Error::new(
+                io::ErrorKind::InvalidInput,
+                "Not Concurrency",
+            )),
         }
     }
 }

@@ -14,9 +14,9 @@ use std::collections::HashMap as StdHashMap;
 /// Example: `x: i32{v | v > 0}` or `buf: &mut [u8]{lifetime < 'a}`
 #[derive(Debug, Clone)]
 pub struct RefinedType {
-    pub base_type: String,      // "i32", "&mut [u8]", etc.
+    pub base_type: String,          // "i32", "&mut [u8]", etc.
     pub refinement: Option<String>, // "v > 0", "lifetime < 'a", etc.
-    pub region: Option<String>,  // Region constraint, if any
+    pub region: Option<String>,     // Region constraint, if any
 }
 
 /// An elaborated function with ownership facts and proof obligations.
@@ -33,14 +33,37 @@ pub struct ElaboratedFunction {
 /// A statement in the elaborated AST.
 #[derive(Debug)]
 pub enum ElaboratedStatement {
-    RegionEnter { name: String },
-    Allocate { region: String, ptr_name: String, size: usize },
-    Deallocate { region: String, ptr_name: String },
-    RegionExit { name: String },
-    EffectEmit { effect: String, payload: String },
-    Consume { value: String },
-    Borrow { value: String, borrow_name: String, mode: String, lifetime: String },
-    Assert { predicate: String },
+    RegionEnter {
+        name: String,
+    },
+    Allocate {
+        region: String,
+        ptr_name: String,
+        size: usize,
+    },
+    Deallocate {
+        region: String,
+        ptr_name: String,
+    },
+    RegionExit {
+        name: String,
+    },
+    EffectEmit {
+        effect: String,
+        payload: String,
+    },
+    Consume {
+        value: String,
+    },
+    Borrow {
+        value: String,
+        borrow_name: String,
+        mode: String,
+        lifetime: String,
+    },
+    Assert {
+        predicate: String,
+    },
 }
 
 /// A proof obligation: a lemma the discrete prover must verify.
@@ -62,13 +85,13 @@ pub struct ElaborationContext {
 
 #[derive(Debug)]
 struct RegionState {
-    status: String, // "unentered", "active", "closed"
+    status: String,           // "unentered", "active", "closed"
     allocations: Vec<String>, // ["ptr_0", "ptr_1", ...]
 }
 
 #[derive(Debug)]
 struct ValueState {
-    kind: String,     // "unique", "borrowed_shared", "borrowed_mut"
+    kind: String, // "unique", "borrowed_shared", "borrowed_mut"
     lifetime: Option<String>,
     region: Option<String>,
 }
@@ -84,16 +107,22 @@ impl ElaborationContext {
     }
 
     pub fn enter_region(&mut self, name: String) {
-        self.active_regions.insert(name, RegionState {
-            status: "active".to_string(),
-            allocations: Vec::new(),
-        });
+        self.active_regions.insert(
+            name,
+            RegionState {
+                status: "active".to_string(),
+                allocations: Vec::new(),
+            },
+        );
     }
 
     pub fn exit_region(&mut self, name: String) -> Result<(), String> {
         if let Some(region) = self.active_regions.get(&name) {
             if !region.allocations.is_empty() {
-                return Err(format!("Cannot exit region {} with active allocations", name));
+                return Err(format!(
+                    "Cannot exit region {} with active allocations",
+                    name
+                ));
             }
         }
         self.active_regions.remove(&name);

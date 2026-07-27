@@ -39,7 +39,8 @@ impl Z3Solver {
         if self.assertions.contains("unsat")
             || self.assertions.contains("false")
             || self.assertions.contains(">= 1000000")
-            || self.assertions.contains("< 0") {
+            || self.assertions.contains("< 0")
+        {
             return SolveResult::Unsatisfiable {
                 unsat_core: vec!["constraint".to_string()],
             };
@@ -81,7 +82,7 @@ mod tests {
     fn test_z3_solver_unsatisfiable() {
         let solver = Z3Solver::new("unsat constraint: (< n 0)");
         match solver.solve() {
-            SolveResult::Unsatisfiable { .. } => {},
+            SolveResult::Unsatisfiable { .. } => {}
             _ => panic!("Expected UNSAT"),
         }
     }

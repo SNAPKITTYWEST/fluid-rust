@@ -3,9 +3,9 @@
 //! Graceful panic recovery, resource exhaustion handling, deadline enforcement,
 //! and checkpoint/restore mechanism. Prevents any panic from crashing runtime.
 
+use serde::{Deserialize, Serialize};
 use std::io;
 use std::time::{Duration, SystemTime};
-use serde::{Deserialize, Serialize};
 
 /// Runtime error severity levels
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -53,10 +53,7 @@ impl RuntimeError {
 /// Resource exhaustion types
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ResourceExhaustion {
-    OutOfMemory {
-        requested: usize,
-        available: usize,
-    },
+    OutOfMemory { requested: usize, available: usize },
     StackOverflow,
     TooManyOpenFiles,
     TooManyConcurrentTasks,
@@ -173,9 +170,15 @@ impl ErrorHandler {
     }
 
     /// Handle resource exhaustion
-    pub fn handle_resource_exhaustion(&mut self, exhaustion: ResourceExhaustion) -> io::Result<bool> {
+    pub fn handle_resource_exhaustion(
+        &mut self,
+        exhaustion: ResourceExhaustion,
+    ) -> io::Result<bool> {
         let (severity, msg) = match &exhaustion {
-            ResourceExhaustion::OutOfMemory { requested, available } => {
+            ResourceExhaustion::OutOfMemory {
+                requested,
+                available,
+            } => {
                 if let Some(callback) = self.oom_callback {
                     if callback(*requested, *available) {
                         return Ok(true); // Callback handled it
@@ -192,9 +195,10 @@ impl ErrorHandler {
             ResourceExhaustion::TooManyOpenFiles => {
                 (ErrorSeverity::Error, "Too many open files".to_string())
             }
-            ResourceExhaustion::TooManyConcurrentTasks => {
-                (ErrorSeverity::Error, "Too many concurrent tasks".to_string())
-            }
+            ResourceExhaustion::TooManyConcurrentTasks => (
+                ErrorSeverity::Error,
+                "Too many concurrent tasks".to_string(),
+            ),
         };
 
         let error = RuntimeError::new(severity, msg, "resource_manager");
@@ -248,7 +252,10 @@ impl ErrorHandler {
             self.stats.restores_performed += 1;
             Ok(checkpoint)
         } else {
-            Err(io::Error::new(io::ErrorKind::NotFound, "Checkpoint not found"))
+            Err(io::Error::new(
+                io::ErrorKind::NotFound,
+                "Checkpoint not found",
+            ))
         }
     }
 
@@ -361,11 +368,7 @@ mod tests {
 
     #[test]
     fn test_runtime_error() {
-        let error = RuntimeError::new(
-            ErrorSeverity::Error,
-            "Test error",
-            "test context",
-        );
+        let error = RuntimeError::new(ErrorSeverity::Error, "Test error", "test context");
         assert_eq!(error.severity, ErrorSeverity::Error);
         assert!(error.message.contains("Test error"));
     }

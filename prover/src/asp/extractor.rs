@@ -37,27 +37,23 @@ impl AspExtractor {
 
         // Convert solver result to proof
         match result {
-            super::solver::SolveResult::Satisfiable { answer_set } => {
-                Ok(super::proof::AspProof {
-                    facts: self
-                        .facts
-                        .ownership_facts
-                        .iter()
-                        .map(|f| f.to_string())
-                        .collect(),
-                    rules: vec![],
-                    satisfiable: true,
-                    answer_set: answer_set.lines().map(|s| s.to_string()).collect(),
-                })
-            }
-            super::solver::SolveResult::Unsatisfiable => {
-                Ok(super::proof::AspProof {
-                    facts: vec![],
-                    rules: vec![],
-                    satisfiable: false,
-                    answer_set: vec![],
-                })
-            }
+            super::solver::SolveResult::Satisfiable { answer_set } => Ok(super::proof::AspProof {
+                facts: self
+                    .facts
+                    .ownership_facts
+                    .iter()
+                    .map(|f| f.to_string())
+                    .collect(),
+                rules: vec![],
+                satisfiable: true,
+                answer_set: answer_set.lines().map(|s| s.to_string()).collect(),
+            }),
+            super::solver::SolveResult::Unsatisfiable => Ok(super::proof::AspProof {
+                facts: vec![],
+                rules: vec![],
+                satisfiable: false,
+                answer_set: vec![],
+            }),
             super::solver::SolveResult::Unknown(msg) => {
                 Err(io::Error::new(io::ErrorKind::Other, msg))
             }
@@ -143,7 +139,11 @@ impl AspFacts {
     pub fn add_ownership(&mut self, value_id: u32, thread: u32, timestamp: u32) {
         self.ownership_facts.push(AspFact::new(
             "owns",
-            vec![&value_id.to_string(), &thread.to_string(), &timestamp.to_string()],
+            vec![
+                &value_id.to_string(),
+                &thread.to_string(),
+                &timestamp.to_string(),
+            ],
         ));
     }
 
@@ -159,7 +159,11 @@ impl AspFacts {
     pub fn add_allocated_in(&mut self, ptr_id: u32, region_id: u32, timestamp: u32) {
         self.region_facts.push(AspFact::new(
             "allocated_in",
-            vec![&ptr_id.to_string(), &region_id.to_string(), &timestamp.to_string()],
+            vec![
+                &ptr_id.to_string(),
+                &region_id.to_string(),
+                &timestamp.to_string(),
+            ],
         ));
     }
 

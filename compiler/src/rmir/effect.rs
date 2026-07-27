@@ -48,10 +48,8 @@ impl EffectTracker {
 
     pub fn emit_effect(&mut self, effect: EffectRequest) -> usize {
         let id = self.effects.len();
-        self.effect_index.insert(
-            format!("{}_{}", effect.kind, id),
-            id,
-        );
+        self.effect_index
+            .insert(format!("{}_{}", effect.kind, id), id);
         self.effects.push((effect, EffectPhase::Pending));
         id
     }
@@ -79,7 +77,10 @@ impl EffectTracker {
                 *phase = EffectPhase::InProgress;
                 Ok(())
             } else {
-                Err(format!("Effect {} already in progress or complete", effect_id))
+                Err(format!(
+                    "Effect {} already in progress or complete",
+                    effect_id
+                ))
             }
         } else {
             Err(format!("Effect {} not found", effect_id))
@@ -104,7 +105,9 @@ impl EffectTracker {
             .effects
             .iter()
             .enumerate()
-            .filter(|(_, (_, phase))| *phase == EffectPhase::Pending || *phase == EffectPhase::InProgress)
+            .filter(|(_, (_, phase))| {
+                *phase == EffectPhase::Pending || *phase == EffectPhase::InProgress
+            })
             .map(|(i, _)| i)
             .collect();
 

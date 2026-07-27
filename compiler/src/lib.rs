@@ -6,12 +6,12 @@
 //! 2. **Lowering**: RMIR AST → machine-independent proof obligations
 //! 3. **Backend** (native, managed, hybrid): Proof obligations → machine code / runtime IR / WASM
 
-pub mod frontend;
-pub mod rmir;
-pub mod lowering;
-pub mod backend;
 pub mod artifact;
+pub mod backend;
+pub mod frontend;
+pub mod lowering;
 pub mod pipeline;
+pub mod rmir;
 
 pub use artifact::CompilationArtifact;
 pub use pipeline::compile;

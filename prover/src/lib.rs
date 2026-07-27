@@ -6,10 +6,10 @@
 //! - Ed25519 signatures + Blake3 hashing for cryptographic sealing
 
 pub mod asp;
-pub mod smt;
 pub mod certificate;
-pub mod verifier;
 pub mod obligations;
+pub mod smt;
+pub mod verifier;
 
 use std::io;
 

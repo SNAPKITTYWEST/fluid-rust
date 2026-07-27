@@ -12,10 +12,10 @@
 //! - Emit an effect (IO, State, Async, etc.)
 //! - Generate a proof obligation (lemma to discharge)
 
+pub mod capability;
+pub mod effect;
 pub mod ir;
 pub mod state;
-pub mod effect;
-pub mod capability;
 
 // TODO: Implement RMIR instruction scheduler
 // TODO: Implement RMIR verifier (tiny checker for proof certificates)

@@ -5,12 +5,12 @@
 //! Output: Proof certificate or unsatisfiability diagnosis
 
 pub mod extractor;
+pub mod proof;
 pub mod rules;
 pub mod solver;
-pub mod proof;
 
-pub use proof::AspProof;
 pub use extractor::AspExtractor;
+pub use proof::AspProof;
 
 // TODO: Implement fact extraction from RMIR
 // TODO: Implement ASP rule generation

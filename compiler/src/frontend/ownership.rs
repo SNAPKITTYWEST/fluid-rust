@@ -75,7 +75,10 @@ impl OwnershipAnalyzer {
 
         for (value, owners) in owned_by {
             if owners.len() > 1 {
-                return Err(format!("Multiple threads own value {}: {:?}", value, owners));
+                return Err(format!(
+                    "Multiple threads own value {}: {:?}",
+                    value, owners
+                ));
             }
         }
 
@@ -110,7 +113,8 @@ impl OwnershipAnalyzer {
     pub fn check_borrow_lifetimes(&self) -> Result<(), String> {
         // For each borrowed value, ensure its lifetime doesn't extend past the unique owner's lifetime
         for fact in &self.facts {
-            if fact.kind == OwnershipKind::BorrowedShared || fact.kind == OwnershipKind::BorrowedMut {
+            if fact.kind == OwnershipKind::BorrowedShared || fact.kind == OwnershipKind::BorrowedMut
+            {
                 // TODO: Check that the lifetime scope is within the owner's scope
             }
         }

@@ -3,8 +3,8 @@
 //! Runtime type feedback, hot path detection, polymorphic inlining, and code
 //! generation specialization. Achieves 2x speedup on hot paths.
 
-use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 /// Type feedback for polymorphic sites
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -255,11 +255,7 @@ inline fn specialized_{}() -> i32 {{
 #[depth = {}]
 fn compiled_path_{}() {{ /* compiled */ }}
 "#,
-            path.instruction_address,
-            path.call_count,
-            avg_time,
-            self.specialization_depth,
-            path_id
+            path.instruction_address, path.call_count, avg_time, self.specialization_depth, path_id
         );
 
         Some(directive)

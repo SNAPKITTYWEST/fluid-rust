@@ -45,8 +45,8 @@ pub struct MemoryConfig {
 impl Default for MemoryConfig {
     fn default() -> Self {
         Self {
-            max_heap_size: 1024 * 1024 * 1024,    // 1GB
-            max_stack_size: 8 * 1024 * 1024,      // 8MB
+            max_heap_size: 1024 * 1024 * 1024,       // 1GB
+            max_stack_size: 8 * 1024 * 1024,         // 8MB
             gc_trigger_threshold: 512 * 1024 * 1024, // 512MB
             max_proof_cache_size: 128 * 1024 * 1024, // 128MB
             region_alloc_limit: 256 * 1024 * 1024,   // 256MB per region
@@ -67,11 +67,11 @@ pub struct TimeoutConfig {
 impl Default for TimeoutConfig {
     fn default() -> Self {
         Self {
-            default_task_timeout_ms: 30000,      // 30 seconds
-            default_effect_timeout_ms: 5000,     // 5 seconds
-            gc_timeout_ms: 10000,                // 10 seconds
+            default_task_timeout_ms: 30000,       // 30 seconds
+            default_effect_timeout_ms: 5000,      // 5 seconds
+            gc_timeout_ms: 10000,                 // 10 seconds
             proof_verification_timeout_ms: 60000, // 60 seconds
-            checkpoint_save_timeout_ms: 5000,    // 5 seconds
+            checkpoint_save_timeout_ms: 5000,     // 5 seconds
         }
     }
 }
@@ -136,7 +136,7 @@ impl Default for ProfilingConfig {
             enable_latency_profiling: true,
             enable_memory_profiling: true,
             enable_cache_profiling: true,
-            sample_rate: 0.1, // Sample 10% of events
+            sample_rate: 0.1,          // Sample 10% of events
             export_interval_ms: 10000, // Export every 10 seconds
         }
     }

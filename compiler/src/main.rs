@@ -99,7 +99,11 @@ fn cmd_compile(args: &[String]) {
                 process::exit(1);
             }
 
-            println!("✓ Compiled: {} ({} bytes RMIR)", source_file, artifact.rmir_bytecode.len());
+            println!(
+                "✓ Compiled: {} ({} bytes RMIR)",
+                source_file,
+                artifact.rmir_bytecode.len()
+            );
 
             if let Some(output_path) = output {
                 match std::fs::write(&output_path, &artifact.rmir_bytecode) {

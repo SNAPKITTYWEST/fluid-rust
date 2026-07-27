@@ -10,17 +10,26 @@ impl TrustedVerifier {
     pub fn verify(cert: &super::certificate::ProofCertificate) -> io::Result<()> {
         // 1. Check program hash is valid
         if cert.program_hash.is_empty() {
-            return Err(io::Error::new(io::ErrorKind::InvalidData, "No program hash"));
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                "No program hash",
+            ));
         }
 
         // 2. Check ASP proof is satisfiable
         if !cert.asp_proof.satisfiable {
-            return Err(io::Error::new(io::ErrorKind::InvalidData, "ASP not satisfiable"));
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                "ASP not satisfiable",
+            ));
         }
 
         // 3. Check SMT proof is satisfiable
         if !cert.smt_proof.satisfiable {
-            return Err(io::Error::new(io::ErrorKind::InvalidData, "SMT not satisfiable"));
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                "SMT not satisfiable",
+            ));
         }
 
         // 4. Check signature (Ed25519)
@@ -29,9 +38,14 @@ impl TrustedVerifier {
         }
 
         // 5. Verify Blake3 hash integrity
-        let expected_hash = blake3::hash(cert.program_hash.as_bytes()).to_hex().to_string();
+        let expected_hash = blake3::hash(cert.program_hash.as_bytes())
+            .to_hex()
+            .to_string();
         if expected_hash != cert.signature {
-            return Err(io::Error::new(io::ErrorKind::InvalidData, "Signature mismatch"));
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                "Signature mismatch",
+            ));
         }
 
         Ok(())

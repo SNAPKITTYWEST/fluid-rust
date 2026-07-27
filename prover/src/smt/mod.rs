@@ -8,12 +8,12 @@
 //! Input: SMT assertions extracted from proof obligations
 //! Output: Proof certificate or unsatisfiability diagnosis
 
-pub mod z3_bridge;
 pub mod constraints;
 pub mod proof;
+pub mod z3_bridge;
 
-pub use proof::SmtProof;
 pub use constraints::SmtGenerator;
+pub use proof::SmtProof;
 
 // TODO: Implement constraint extraction from proof obligations
 // TODO: Implement Z3 solver integration

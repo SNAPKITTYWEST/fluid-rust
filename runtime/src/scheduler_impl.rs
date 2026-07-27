@@ -1,5 +1,4 @@
 /// Task scheduler with continuation-based control flow
-
 use std::collections::VecDeque;
 
 #[derive(Clone, Debug)]

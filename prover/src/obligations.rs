@@ -34,7 +34,10 @@ impl ProofObligation {
         Self {
             id,
             kind: ObligationKind::OwnershipInvariant,
-            description: format!("Value '{}' respects ownership invariant (linear use)", value),
+            description: format!(
+                "Value '{}' respects ownership invariant (linear use)",
+                value
+            ),
             assumptions: vec![
                 format!("linear({})", value),
                 format!("not_consumed({})", value),

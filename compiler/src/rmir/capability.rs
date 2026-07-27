@@ -11,8 +11,8 @@ use std::collections::HashMap as StdHashMap;
 /// A linear capability: permission to perform an action.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Capability {
-    Read,      // Permission to read
-    Write,     // Permission to write (linear: exactly one holder)
+    Read,       // Permission to read
+    Write,      // Permission to write (linear: exactly one holder)
     Deallocate, // Permission to deallocate
 }
 

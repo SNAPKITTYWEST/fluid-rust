@@ -1,11 +1,12 @@
 //! Runtime integration: complete execution pipeline
 
 use crate::{
-    EffectHandler, EffectRequest, EffectResponse,
-    effect_handler_impl::{IOHandler, StateHandler, AsyncHandler, RegionHandler, GCHandler, ExceptionHandler, FFIHandler, ConcurrencyHandler},
-    Scheduler, Task,
-    GarbageCollector,
-    ManagedExecutor, NativeExecutor,
+    effect_handler_impl::{
+        AsyncHandler, ConcurrencyHandler, ExceptionHandler, FFIHandler, GCHandler, IOHandler,
+        RegionHandler, StateHandler,
+    },
+    EffectHandler, EffectRequest, EffectResponse, GarbageCollector, ManagedExecutor,
+    NativeExecutor, Scheduler, Task,
 };
 use std::io;
 
@@ -77,9 +78,13 @@ impl Runtime {
             EffectRequest::Async { .. } => self.effect_handlers.async_.handle(request.clone()),
             EffectRequest::Region { .. } => self.effect_handlers.region.handle(request.clone()),
             EffectRequest::GC { .. } => self.effect_handlers.gc.handle(request.clone()),
-            EffectRequest::Exception { .. } => self.effect_handlers.exception.handle(request.clone()),
+            EffectRequest::Exception { .. } => {
+                self.effect_handlers.exception.handle(request.clone())
+            }
             EffectRequest::FFI { .. } => self.effect_handlers.ffi.handle(request.clone()),
-            EffectRequest::Concurrency { .. } => self.effect_handlers.concurrency.handle(request.clone()),
+            EffectRequest::Concurrency { .. } => {
+                self.effect_handlers.concurrency.handle(request.clone())
+            }
         }
     }
 

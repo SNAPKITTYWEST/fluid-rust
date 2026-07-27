@@ -26,7 +26,10 @@ pub fn execute_instruction(
 
         RmirInstruction::Move { src, dst } => {
             // Precondition: src exists
-            let val = state.values.get(src).ok_or(format!("Value {} not found", src))?;
+            let val = state
+                .values
+                .get(src)
+                .ok_or(format!("Value {} not found", src))?;
 
             // Postcondition: dst takes the value, src is invalidated
             next_state.values.insert(*dst, val.clone());
@@ -47,7 +50,10 @@ pub fn execute_instruction(
             lifetime,
         } => {
             // Precondition: src exists
-            let _val = state.values.get(src).ok_or(format!("Value {} not found", src))?;
+            let _val = state
+                .values
+                .get(src)
+                .ok_or(format!("Value {} not found", src))?;
 
             // Postcondition: create a reference
             next_state
@@ -83,15 +89,22 @@ pub fn execute_instruction(
 
         RmirInstruction::RegionEnter { region_id } => {
             // Precondition: region must be unentered
-            let region_status = state.regions.get(region_id).cloned().unwrap_or(RegionStatus::Unentered);
+            let region_status = state
+                .regions
+                .get(region_id)
+                .cloned()
+                .unwrap_or(RegionStatus::Unentered);
             if region_status != RegionStatus::Unentered {
                 return Err(format!("Region {} already entered", region_id));
             }
 
             // Postcondition: mark region as active
-            next_state
-                .regions
-                .insert(*region_id, RegionStatus::Active { allocations: vec![] });
+            next_state.regions.insert(
+                *region_id,
+                RegionStatus::Active {
+                    allocations: vec![],
+                },
+            );
 
             obligations.push(ProofObligation {
                 id: next_state.proof_obligations.len() as u32,
@@ -133,15 +146,15 @@ pub fn execute_instruction(
             }
         }
 
-        RmirInstruction::Deallocate {
-            region_id,
-            ptr_id,
-        } => {
+        RmirInstruction::Deallocate { region_id, ptr_id } => {
             // Precondition: region must be active and contain ptr_id
             match state.regions.get(region_id) {
                 Some(RegionStatus::Active { allocations }) => {
                     if !allocations.contains(ptr_id) {
-                        return Err(format!("Pointer {} not allocated in region {}", ptr_id, region_id));
+                        return Err(format!(
+                            "Pointer {} not allocated in region {}",
+                            ptr_id, region_id
+                        ));
                     }
 
                     // Postcondition: remove pointer from allocations
@@ -191,7 +204,10 @@ pub fn execute_instruction(
             obligations.push(ProofObligation {
                 id: next_state.proof_obligations.len() as u32,
                 kind: "effect_precondition".to_string(),
-                description: format!("Effect {} emitted, preconditions must be verified", effect.kind),
+                description: format!(
+                    "Effect {} emitted, preconditions must be verified",
+                    effect.kind
+                ),
             });
         }
 

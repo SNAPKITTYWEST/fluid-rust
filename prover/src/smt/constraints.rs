@@ -33,25 +33,21 @@ impl SmtGenerator {
 
         // Convert solver result to proof
         match result {
-            super::z3_bridge::SolveResult::Satisfiable { model } => {
-                Ok(super::proof::SmtProof {
-                    assertions: self
-                        .constraints
-                        .constraints
-                        .iter()
-                        .map(|c| c.to_smt_lib2())
-                        .collect(),
-                    satisfiable: true,
-                    model,
-                })
-            }
-            super::z3_bridge::SolveResult::Unsatisfiable { .. } => {
-                Ok(super::proof::SmtProof {
-                    assertions: vec![],
-                    satisfiable: false,
-                    model: Default::default(),
-                })
-            }
+            super::z3_bridge::SolveResult::Satisfiable { model } => Ok(super::proof::SmtProof {
+                assertions: self
+                    .constraints
+                    .constraints
+                    .iter()
+                    .map(|c| c.to_smt_lib2())
+                    .collect(),
+                satisfiable: true,
+                model,
+            }),
+            super::z3_bridge::SolveResult::Unsatisfiable { .. } => Ok(super::proof::SmtProof {
+                assertions: vec![],
+                satisfiable: false,
+                model: Default::default(),
+            }),
             super::z3_bridge::SolveResult::Unknown(msg) => {
                 Err(io::Error::new(io::ErrorKind::Other, msg))
             }
@@ -102,7 +98,8 @@ impl SmtConstraints {
 
     /// Declare a variable and its type.
     pub fn declare_variable(&mut self, name: &str, type_name: &str) {
-        self.variable_types.insert(name.to_string(), type_name.to_string());
+        self.variable_types
+            .insert(name.to_string(), type_name.to_string());
     }
 
     /// Generate SMT-LIB2 format output.

@@ -40,16 +40,14 @@ impl AspSolver {
         if self.program.contains("contradiction")
             || self.program.contains("conflict")
             || self.program.contains("double_use")
-            || self.program.contains("access_to_closed") {
+            || self.program.contains("access_to_closed")
+        {
             return Ok(SolveResult::Unsatisfiable);
         }
 
         // Otherwise, assume satisfiable
         Ok(SolveResult::Satisfiable {
-            answer_set: format!(
-                "Answer: 1\n{}\nSATISFIABLE\n",
-                extract_facts(&self.program)
-            ),
+            answer_set: format!("Answer: 1\n{}\nSATISFIABLE\n", extract_facts(&self.program)),
         })
     }
 
@@ -77,7 +75,7 @@ mod tests {
         let program = "owns(x, 0, 100).\nlinear(x).";
         let solver = AspSolver::new(program);
         match solver.solve().unwrap() {
-            SolveResult::Satisfiable { .. } => {},
+            SolveResult::Satisfiable { .. } => {}
             _ => panic!("Expected SAT"),
         }
     }
@@ -87,7 +85,7 @@ mod tests {
         let program = "contradiction.\ndouble_use(x).";
         let solver = AspSolver::new(program);
         match solver.solve().unwrap() {
-            SolveResult::Unsatisfiable => {},
+            SolveResult::Unsatisfiable => {}
             _ => panic!("Expected UNSAT"),
         }
     }

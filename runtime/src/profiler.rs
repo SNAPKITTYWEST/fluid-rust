@@ -3,8 +3,8 @@
 //! Effect latency tracking, task scheduling statistics, GC pause analysis,
 //! and proof cache hit rate metrics.
 
-use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 /// Histogram bucket for latency distribution
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -122,7 +122,12 @@ pub struct GcPauseEvent {
 }
 
 impl GcPauseEvent {
-    pub fn new(pause_duration_us: u32, freed_bytes: u64, heap_before: u64, heap_after: u64) -> Self {
+    pub fn new(
+        pause_duration_us: u32,
+        freed_bytes: u64,
+        heap_before: u64,
+        heap_after: u64,
+    ) -> Self {
         Self {
             timestamp_ms: std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
@@ -233,7 +238,13 @@ impl Profiler {
     }
 
     /// Record GC pause
-    pub fn record_gc_pause(&mut self, pause_duration_us: u32, freed_bytes: u64, heap_before: u64, heap_after: u64) {
+    pub fn record_gc_pause(
+        &mut self,
+        pause_duration_us: u32,
+        freed_bytes: u64,
+        heap_before: u64,
+        heap_after: u64,
+    ) {
         if !self.recording {
             return;
         }
@@ -278,7 +289,11 @@ impl Profiler {
         }
 
         let total_pauses = self.gc_pauses.len() as u64;
-        let total_pause_time: u64 = self.gc_pauses.iter().map(|p| p.pause_duration_us as u64).sum();
+        let total_pause_time: u64 = self
+            .gc_pauses
+            .iter()
+            .map(|p| p.pause_duration_us as u64)
+            .sum();
         let average_pause_us = (total_pause_time as f64) / (total_pauses as f64);
         let total_freed: u64 = self.gc_pauses.iter().map(|p| p.freed_bytes).sum();
 
