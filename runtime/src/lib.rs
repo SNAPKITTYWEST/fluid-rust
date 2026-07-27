@@ -12,6 +12,7 @@ pub mod effect_handler_impl;
 pub mod scheduler_impl;
 pub mod gc_impl;
 pub mod executor_impl;
+pub mod integration;
 
 // Phase P5 modules
 pub mod proof_cache;
@@ -25,6 +26,7 @@ pub use effect_handler_impl::{EffectRequest, EffectResponse, EffectHandler};
 pub use scheduler_impl::{Task, TaskStatus, Scheduler};
 pub use gc_impl::GarbageCollector;
 pub use executor_impl::{NativeExecutor, ManagedExecutor};
+pub use integration::Runtime;
 
 // Phase P5 exports
 pub use proof_cache::ProofCache;
@@ -34,8 +36,8 @@ pub use error_handler::ErrorHandler;
 pub use profiler::Profiler;
 pub use config::ProductionConfig;
 
-/// Execute verified RMIR bytecode
+/// Execute verified RMIR bytecode with full runtime
 pub fn execute(bytecode: &[u8]) -> std::io::Result<i32> {
-    let mut executor = ManagedExecutor::new();
-    executor.execute(bytecode)
+    let mut runtime = Runtime::new();
+    runtime.execute(bytecode)
 }
