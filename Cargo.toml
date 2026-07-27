@@ -3,10 +3,15 @@ members = ["compiler", "prover", "runtime"]
 resolver = "2"
 
 [workspace.package]
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
-authors = ["SNAPKITTYWEST <snapkittywest@context>"]
+authors = ["Jessica SNAPKITTYWEST <jessica@collectivekitty.com>"]
 license = "Apache-2.0 OR MIT"
+repository = "https://github.com/SNAPKITTYWEST/fluid-rust"
+homepage = "https://github.com/SNAPKITTYWEST/fluid-rust"
+description = "Verified systems language with Liquid types, algebraic effects, and formal verification"
+keywords = ["systems", "verification", "rust", "formal-methods", "effects"]
+categories = ["development-tools", "embedded"]
 
 [workspace.dependencies]
 # Core

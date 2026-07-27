@@ -4,6 +4,11 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
+description = "FLUID RUST proof engine: ASP + SMT verification with cryptographic certificates"
+repository.workspace = true
+homepage.workspace = true
+keywords = ["formal-verification", "proofs", "smt", "asp"]
+categories = ["development-tools", "mathematics"]
 
 [dependencies]
 rustc-hash.workspace = true

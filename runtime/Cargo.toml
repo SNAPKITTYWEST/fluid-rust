@@ -4,6 +4,11 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
+description = "FLUID RUST runtime: Execution engine for verified RMIR bytecode with algebraic effects"
+repository.workspace = true
+homepage.workspace = true
+keywords = ["runtime", "effects", "bytecode", "verification"]
+categories = ["development-tools"]
 
 [dependencies]
 rustc-hash.workspace = true

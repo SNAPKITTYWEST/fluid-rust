@@ -4,6 +4,11 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
+description = "FLUID RUST compiler: Liquid Rust frontend + RMIR elaboration"
+repository.workspace = true
+homepage.workspace = true
+keywords = ["compiler", "liquid-types", "verification"]
+categories = ["development-tools::compiler"]
 
 [dependencies]
 rustc-hash.workspace = true
