@@ -1,0 +1,35 @@
+[workspace]
+members = ["compiler", "prover", "runtime"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["SNAPKITTYWEST <snapkittywest@context>"]
+license = "Apache-2.0 OR MIT"
+
+[workspace.dependencies]
+# Core
+rustc-hash = "1.1"
+indexmap = "2.0"
+smallvec = "1.11"
+
+# Parsing & HIR
+syn = { version = "2.0", features = ["full"] }
+quote = "1.0"
+proc-macro2 = "1.0"
+
+# Testing
+insta = "1.35"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = 3
+
+[profile.dev]
+opt-level = 0

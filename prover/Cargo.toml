@@ -1,0 +1,23 @@
+[package]
+name = "fluid-rust-prover"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+rustc-hash.workspace = true
+indexmap.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+# Solver backends (optional, behind features)
+# z3 and clingo to be added when integrating external solver libraries
+
+[dev-dependencies]
+insta.workspace = true
+
+[[bin]]
+name = "fluid-prover"
+path = "src/main.rs"
+
