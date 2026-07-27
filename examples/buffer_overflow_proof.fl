@@ -1,0 +1,31 @@
+// FLUID RUST Example: Buffer Overflow Caught by SMT
+// This code COMPILES in Rust but REJECTED by FLUID RUST
+// because SMT proves the buffer overflow is possible
+
+fn read_buffer_unsafe(buffer: &[i32], index: i32) -> i32 {
+    // Problem: index can be negative OR exceed buffer length
+    // Rust borrow checker: "Well, it's a reference, so it's safe"
+    // FLUID RUST SMT: "Actually, this index WILL go out of bounds"
+    
+    buffer[index as usize]  // <- SMT finds counterexample here
+}
+
+// Refined version that proves safety:
+fn read_buffer_safe(
+    buffer: &[i32],
+    index: i32 @{index >= 0 && index < buffer.len()}
+) -> i32 {
+    // FLUID RUST now has proof that index is in bounds
+    // SMT solver verifies: 0 <= index < buffer.len()
+    buffer[index as usize]
+}
+
+fn main() {
+    let data = [1, 2, 3, 4, 5];
+    
+    // This should FAIL FLUID RUST compilation:
+    let value1 = read_buffer_unsafe(&data, -1);  // SMT counterexample: index = -1
+    
+    // This should PASS FLUID RUST compilation:
+    let value2 = read_buffer_safe(&data, 2);     // SMT proves: 0 <= 2 < 5
+}
