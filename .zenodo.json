@@ -1,0 +1,55 @@
+{
+  "title": "FLUID RUST: Verified Systems Language with Liquid Types and Algebraic Effects",
+  "description": "Production-grade verified systems language combining Liquid Rust (ownership-based memory safety) with algebraic effect handlers (Haskell-style computational model), proven correct via discrete logic (ASP + SMT). Version 1.0.0 production release with 82/82 tests passing.",
+  "creators": [
+    {
+      "name": "Parr, Ahmad Ali",
+      "affiliation": "SNAPKITTYWEST Collective"
+    },
+    {
+      "name": "SNAPKITTYWEST Collective",
+      "affiliation": "SNAPKITTYWEST Collective"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "Bot, Ahmad",
+      "type": "Other"
+    }
+  ],
+  "keywords": [
+    "systems programming",
+    "formal verification",
+    "liquid types",
+    "algebraic effects",
+    "ASP",
+    "SMT",
+    "memory safety",
+    "proof carrying code",
+    "Rust"
+  ],
+  "license": "Apache-2.0 OR MIT",
+  "version": "1.0.0",
+  "publication_date": "2026-07-27",
+  "grants": [],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/SNAPKITTYWEST/fluid-rust",
+      "relation": "isSupplementedBy",
+      "resource_type": "software"
+    }
+  ],
+  "communities": [
+    {
+      "identifier": "programming-languages"
+    },
+    {
+      "identifier": "formal-methods"
+    },
+    {
+      "identifier": "software-engineering"
+    }
+  ],
+  "access_right": "open",
+  "notes": "See GitHub repository for latest development version and issues."
+}
