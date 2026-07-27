@@ -1,23 +1,17 @@
-//! Fluid Rust Runtime: Managed Execution Engine
-//!
-//! The runtime provides:
-//! - Algebraic effect handler dispatch
-//! - Task scheduler and continuation management
-//! - Garbage collector (for managed mode)
-//! - Effect ABI bridge (for native/managed interop)
-//!
-//! The runtime is NOT the execution engine itself; it's the service layer
-//! that handles effects (IO, State, Async, Region, GC, Exception, FFI, Concurrency).
+//! FLUID RUST Runtime - Executes verified RMIR bytecode
 
-pub mod effect_handler;
-pub mod effect;
-pub mod scheduler;
-pub mod gc;
-pub mod native;
-pub mod managed;
-pub mod abi;
+pub mod effect_handler_impl;
+pub mod scheduler_impl;
+pub mod gc_impl;
+pub mod executor_impl;
 
-// TODO: Implement effect dispatcher
-// TODO: Implement task scheduler
-// TODO: Implement GC integration
-// TODO: Implement ABI bridge for native/managed interop
+pub use effect_handler_impl::{EffectRequest, EffectResponse, EffectHandler};
+pub use scheduler_impl::{Task, TaskStatus, Scheduler};
+pub use gc_impl::GarbageCollector;
+pub use executor_impl::{NativeExecutor, ManagedExecutor};
+
+/// Execute verified RMIR bytecode
+pub fn execute(bytecode: &[u8]) -> std::io::Result<i32> {
+    let mut executor = ManagedExecutor::new();
+    executor.execute(bytecode)
+}
