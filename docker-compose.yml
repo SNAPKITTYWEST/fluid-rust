@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  fluid-rust-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: snapkittywest/fluid-rust:dev
+    container_name: fluid-rust-dev
+    environment:
+      RUST_BACKTRACE: 1
+      RUST_LOG: debug
+    volumes:
+      - .:/workspace
+      - /workspace/target  # Prevent host target from shadowing
+    working_dir: /workspace
+    command: fluidc --help
+    networks:
+      - fluid-net
+
+  fluid-rust-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILDKIT_INLINE_CACHE: 1
+    image: snapkittywest/fluid-rust:v1.0.0
+    container_name: fluid-rust-prod
+    environment:
+      RUST_LOG: info
+    ports:
+      - "3000:3000"  # For potential future web interface
+    healthcheck:
+      test: ["CMD", "fluidc", "--version"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    networks:
+      - fluid-net
+    restart: unless-stopped
+
+networks:
+  fluid-net:
+    driver: bridge
+
+# Usage:
+#   Development:
+#     docker-compose run fluid-rust-dev bash
+#     docker-compose run fluid-rust-dev cargo test
+#
+#   Production:
+#     docker-compose up -d fluid-rust-prod
+#     docker exec fluid-rust-prod fluidc --version
