@@ -7,6 +7,30 @@
 //! - Capability facts: capability(value, kind, timestamp)
 //! - Effect facts: effect_emitted(effect, timestamp)
 
+use std::io;
+
+/// Main ASP extractor (Phase P1 stub)
+pub struct AspExtractor {
+    facts: AspFacts,
+}
+
+impl AspExtractor {
+    pub fn new() -> Self {
+        AspExtractor {
+            facts: AspFacts::new(),
+        }
+    }
+
+    pub fn extract_from_rmir(&mut self, _rmir_bytecode: &[u8]) -> io::Result<String> {
+        // TODO: Phase P4 — implement real extraction from RMIR
+        Ok(self.facts.to_asp_program())
+    }
+
+    pub fn solve(&self) -> io::Result<super::proof::AspProof> {
+        // TODO: Phase P4 — invoke clingo solver
+        Ok(super::proof::AspProof::default())
+    }
+}
 
 /// Represents a fact in Answer Set Programming.
 /// Facts are ground atoms (no variables at this stage).

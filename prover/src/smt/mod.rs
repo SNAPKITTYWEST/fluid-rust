@@ -10,6 +10,10 @@
 
 pub mod z3_bridge;
 pub mod constraints;
+pub mod proof;
+
+pub use proof::SmtProof;
+pub use constraints::SmtGenerator;
 
 // TODO: Implement constraint extraction from proof obligations
 // TODO: Implement Z3 solver integration

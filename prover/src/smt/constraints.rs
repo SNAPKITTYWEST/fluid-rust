@@ -3,6 +3,30 @@
 //! Converts proof obligations into SMT-LIB2 format assertions.
 
 use std::collections::HashMap as StdHashMap;
+use std::io;
+
+/// Main SMT generator (Phase P1 stub)
+pub struct SmtGenerator {
+    constraints: SmtConstraints,
+}
+
+impl SmtGenerator {
+    pub fn new() -> Self {
+        SmtGenerator {
+            constraints: SmtConstraints::new(),
+        }
+    }
+
+    pub fn extract_from_rmir(&mut self, _rmir_bytecode: &[u8]) -> io::Result<String> {
+        // TODO: Phase P4 — implement real constraint extraction from RMIR
+        Ok(self.constraints.to_smt_lib2())
+    }
+
+    pub fn solve(&self) -> io::Result<super::proof::SmtProof> {
+        // TODO: Phase P4 — invoke Z3 solver
+        Ok(super::proof::SmtProof::default())
+    }
+}
 
 /// Represents a constraint on a variable.
 #[derive(Debug, Clone)]

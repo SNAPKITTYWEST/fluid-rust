@@ -7,6 +7,10 @@
 pub mod extractor;
 pub mod rules;
 pub mod solver;
+pub mod proof;
+
+pub use proof::AspProof;
+pub use extractor::AspExtractor;
 
 // TODO: Implement fact extraction from RMIR
 // TODO: Implement ASP rule generation

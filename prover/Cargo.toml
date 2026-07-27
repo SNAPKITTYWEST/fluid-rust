@@ -10,9 +10,14 @@ rustc-hash.workspace = true
 indexmap.workspace = true
 serde.workspace = true
 serde_json.workspace = true
+blake3 = "1.5"
+chrono = "0.4"
 
-# Solver backends (optional, behind features)
-# z3 and clingo to be added when integrating external solver libraries
+[features]
+default = []
+solver-asp = []
+solver-smt = []
+crypto-signing = []
 
 [dev-dependencies]
 insta.workspace = true
