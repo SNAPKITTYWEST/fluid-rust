@@ -1,0 +1,35 @@
+# Rust build artifacts
+target/
+Cargo.lock
+*.rlib
+*.rmeta
+*.so
+*.dylib
+*.dll
+*.a
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Development
+*.log
+.env
+.env.local
+*.tmp
+
+# Test artifacts
+/tests/**/*.profraw
+/tests/**/*.profdata
+
+# Generated documentation
+/target/doc/
